@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create note</title>
+</head>
+<body>
+
+<h1>Create note</h1>
+
+<form action="/note/create" method="post">
+  <div>
+    <label>Title</label><br>
+    <input name="title" required>
+  </div>
+
+  <div>
+    <label>Content</label><br>
+    <textarea name="content" rows="6" required></textarea>
+  </div>
+
+  <p>
+    <button type="submit">Create</button>
+    <a href="/note/list">Cancel</a>
+  </p>
+</form>
+
+</body>
+</html>
