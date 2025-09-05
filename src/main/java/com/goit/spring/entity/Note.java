@@ -1,6 +1,16 @@
 package com.goit.spring.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "note")
 public class Note {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
     private String content;
@@ -43,6 +53,7 @@ public class Note {
     public void setContent(String content) {
         this.content = content;
     }
+
     @Override
     public String toString() {
         return "Note # " + getId() + " / " + getTitle() + " / " + getContent();

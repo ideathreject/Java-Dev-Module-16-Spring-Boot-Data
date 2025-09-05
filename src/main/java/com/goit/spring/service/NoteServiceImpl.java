@@ -1,52 +1,55 @@
 package com.goit.spring.service;
 
 import com.goit.spring.entity.Note;
+import com.goit.spring.repository.NoteRepository;
 import com.goit.spring.utils.NoteNotExist;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
+@Transactional
 public class NoteServiceImpl implements NoteService {
-    private final Map<Long, Note> notes = new HashMap<>();
-    private final AtomicLong idGenerator = new AtomicLong();
 
+    private final NoteRepository repo;
+
+    public NoteServiceImpl(NoteRepository repo) {
+        this.repo = repo;
+    }
+
+    @Override
     public Note add(Note note) {
-        long id = idGenerator.getAndIncrement();
-        note.setId(id);
-        notes.put(id, note);
-        return note;
+        return repo.save(note);
     }
 
+    @Override
     public void deleteById(long id) {
-        if (!notes.containsKey(id)) {
-            throw new NoteNotExist(id);
-        }
-        notes.remove(id);
+        if (!repo.existsById(id)) throw new NoteNotExist(id);
+        repo.deleteById(id);
     }
 
+    @Override
     public void update(Note note) {
         Long id = note.getId();
-        if (!notes.containsKey(id)) {
-            throw new NoteNotExist(id);
-        }
-        Note existNote = notes.get(id);
-        existNote.setContent(note.getContent());
-        existNote.setTitle(note.getTitle());
+        if (id == null) throw new NoteNotExist(id);
+
+        Note exist = repo.findById(id)
+                .orElseThrow(() -> new NoteNotExist(id));
+
+        exist.setTitle(note.getTitle());
+        exist.setContent(note.getContent());
+
+        repo.save(exist);
     }
 
+    @Override
     public Note getById(long id) {
-        Note note = notes.get(id);
-        if (note == null) {
-            throw new NoteNotExist(id);
-        }
-        return note;
+        return repo.findById(id)
+                .orElseThrow(() -> new NoteNotExist(id));
     }
 
+    @Override
     public List<Note> listAll() {
-        return new ArrayList<>(notes.values());
+        return repo.findAll();
     }
 }
