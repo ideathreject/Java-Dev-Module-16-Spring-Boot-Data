@@ -1,7 +1,7 @@
-# 📒 Note App – Spring Boot MVC CRUD Example
+# 📒 Note App – Spring Boot MVC + JPA + Flyway (CRUD)
 
-A minimal Java app that demonstrates basic CRUD using **Spring Boot MVC**, **Thymeleaf**, and Java Collections.  
-The app manages a single entity: `Note`, with a **pure HTML UI** (no frameworks) and in-memory storage via `HashMap`.
+A minimal Java app that demonstrates CRUD for a single entity **Note** using **Spring Boot MVC**, **Thymeleaf**, **Spring Data JPA**, **H2**, and **Flyway**.  
+
 
 ---
 
@@ -10,32 +10,33 @@ The app manages a single entity: `Note`, with a **pure HTML UI** (no frameworks)
 ### ✅ Entity
 **Note**
 - `id` (Long, auto-generated)
-- `title` (String)
-- `content` (String)
+- `title` (String, required)
+- `content` (String, up to 2000 chars)
 
-### ✅ Service Layer
-Encapsulates business logic in a Spring `@Service`.  
-Provides full CRUD operations:
+### ✅ Persistence (JPA + Flyway)
+- `@Entity`-annotated `Note` mapped to table `note`
+- `NoteRepository extends JpaRepository<Note, Long>`
+- Schema managed by **Flyway** migrations (V1 creates table `note`)
+
+
+### ✅ Service Layer 
+CRUD operations:
 - Create (`add`)
 - Read (`getById`, `getAll`)
-- Update (`update(Note note)`) — updates title/content by id
+- Update (`update(Note note)`)
 - Delete (`deleteById`)
 
-Uses a `HashMap<Long, Note>` to simulate DB behavior and `AtomicLong` for unique id generation.
-
-### ✅ Web Layer (Spring MVC)
-`NoteController` with routes:
+### ✅ Web Layer (Spring MVC) — Routing per mentor spec
+`NoteController` routes:
 - `GET /note/list` — list notes
 - `GET /note/create` — show create form
 - `POST /note/create` — create note
-- `GET /note/edit?id=123` — show edit form (id as query parameter)
-- `POST /note/edit` — update note (id and fields in request body)
-- `POST /note/delete` — delete note (id in request body)
+- `GET /note/edit?id=123` — show edit form (**id in query**)
+- `POST /note/edit` — update note (**id + fields in body**)
+- `POST /note/delete` — delete note (**id in body**)
 
 ### ✅ UI (Pure HTML + Thymeleaf)
-Simple templates
 - `templates/note/list.html`
 - `templates/note/create.html`
 - `templates/note/edit.html`
-# Java-Dev-Module-16-Spring-Boot-Data
-# Java-Dev-Module-16-Spring-Boot-Data
+
