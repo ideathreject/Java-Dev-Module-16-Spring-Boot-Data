@@ -23,7 +23,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public void deleteById(long id) {
+    public void deleteById(Long id) {
         if (!repo.existsById(id)) throw new NoteNotExist(id);
         repo.deleteById(id);
     }
@@ -43,7 +43,7 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public Note getById(long id) {
+    public Note getById(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new NoteNotExist(id));
     }
