@@ -3,12 +3,13 @@ package com.goit.spring.service;
 import com.goit.spring.entity.Note;
 import com.goit.spring.repository.NoteRepository;
 import com.goit.spring.utils.NoteNotExist;
-import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class NoteServiceImpl implements NoteService {
 
     private final NoteRepository repo;
@@ -18,17 +19,20 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    @Transactional
     public Note add(Note note) {
         return repo.save(note);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long id) {
         if (!repo.existsById(id)) throw new NoteNotExist(id);
         repo.deleteById(id);
     }
 
     @Override
+    @Transactional
     public void update(Note note) {
         Long id = note.getId();
         if (id == null) throw new NoteNotExist(id);
